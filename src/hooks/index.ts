@@ -6,16 +6,21 @@ import { simpleContractAddress } from "../contracts";
 
 const simpleContractInterface = new ethers.utils.Interface(simpleContractAbi);
 const contract = new Contract(simpleContractAddress, simpleContractInterface);
+console.log(contract);
 
 export function useCount() {
-  const [count]: any =
+  const { value, error } =
     useCall({
       contract: new Contract(simpleContractAddress, simpleContractInterface),
       method: "count",
       args: [],
-    }) ?? [];
-  console.log(count);
-  return count;
+    }) ?? {};
+  if (error) {
+    console.error(error.message);
+    return undefined;
+  }
+  console.log(value?.[0]);
+  return value?.[0];
 }
 
 export function useIncrement() {
